@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>趣博客邮件</title>
+
+    <style>
+        body,
+        html {
+            height: 100%;
+            width: 100%;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .font-v1 {
+            font-size: 16px;
+            font-weight: 400;
+            color: black;
+        }
+
+        .font-v2 {
+            font-size: 14px;
+            font-weight: 300;
+            color: #494949;
+        }
+
+        .font-v3 {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .funny-button {
+            font-size: 16px;
+            line-height: 35px;
+            display: block;
+            background-color: rgb(0, 164, 255);
+            color: rgb(255, 255, 255);
+            text-align: center;
+            text-decoration: none;
+            margin-top: 20px;
+            border-radius: 3px;
+        }
+
+        .content {
+            width: 80%;
+            height: 50%;
+            border-radius: 0px;
+            max-width: 650px;
+        }
+
+        .logo {
+            font-weight: 400;
+            color: rgb(24, 144, 255);
+            font-size: 34px;
+        }
+
+        .logo-txt {
+            color: black;
+            font-size: 24px;
+        }
+
+        .card {
+            margin: 0px 50px 10px 50px;
+            line-height: 50px;
+            padding-bottom: 50px;
+        }
+
+        .card p {
+            line-height: 48px;
+        }
+
+        .well {
+            min-height: 20px;
+            padding: 19px;
+            margin-bottom: 20px;
+            background-color: #f5f5f5;
+            border: 1px solid #e3e3e3;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
+            box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
+        }
+
+        .well-lg {
+            padding: 24px;
+            border-radius: 6px;
+        }
+
+        .panel {
+            margin-bottom: 20px;
+            background-color: #fff;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            -webkit-box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
+            box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
+        }
+
+        .panel-default {
+            border-color: #ddd;
+        }
+
+        .panel-body {
+            padding: 15px;
+        }
+
+        .my-panel {
+            margin: 30px;
+        }
+
+        @media screen and (max-width: 900px) {
+            .card {
+                margin: 0px 10px 10px 10px;
+                line-height: 50px;
+                padding-bottom: 50px;
+            }
+
+            .my-panel {
+                margin: 4px;
+            }
+
+            .well {
+                min-height: 10px;
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+
+            .well-lg {
+                padding: 12px;
+                border-radius: 3px;
+            }
+
+            .panel-body {
+                padding: 10px;
+            }
+
+            .panel {
+                margin-bottom: 10px;
+            }
+
+            .content {
+                width: 100%;
+                height: 100%;
+                border-radius: 0px;
+                max-width: 650px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div align="center">
+        <div class="well well-lg content">
+
+            <span class="logo">趣</span>
+            <span class="logo-txt">博客</span>
+
+            <div class="panel panel-default" class="my-panel">
+                <div class="panel-body">
+
+                    <div align="left" class="card">
+                        ${content}
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <p class="font-v3" style="text-align:center; margin:20px auto 14px auto; ">
+                    此为系统邮件，请勿回复。
+                </p>
+                <p class="font-v3" style="max-width: 100%; margin:auto; text-align:center;line-height:22px;">
+                    趣博客 —— 有趣的博客网站，分享计算机及其他领域的技术文章，可发布各种领域的个人博客文章，与各大网友分享技术，共同建造和谐的开源社区
+                <p>
+                    <span class="font-v3" style=" text-align:center;">©2021 趣博客 Copyright</span>
+                    <span>
+                        <a rel="nofollow"
+                            href="http://wpa.qq.com/msgrd?v=3&amp;uin=877526278&amp;site=qq&amp;menu=yes&amp;from=message&amp;isappinstalled=0"
+                            style="color: gray;">
+                            联系站长
+                        </a>
+                    </span>
+                </p>
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>
