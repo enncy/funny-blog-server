@@ -18,14 +18,24 @@ import lombok.NoArgsConstructor;
 public class ServiceException extends Exception {
 
     public String detail;
+    public String message;
 
     public ServiceException(String message) {
         super(message);
+        this.message = message;
         this.detail = null;
     }
 
     public ServiceException(String message, String detail) {
         super(message);
         this.detail = detail;
+    }
+
+    @Override
+    public String toString() {
+        return "ServiceException{" +
+                "detail='" + detail + '\'' +
+                ", message='" + message + '\'' +
+                '}';
     }
 }

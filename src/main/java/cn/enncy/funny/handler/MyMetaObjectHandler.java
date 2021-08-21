@@ -1,4 +1,4 @@
-package cn.enncy.funny.config;
+package cn.enncy.funny.handler;
 
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;

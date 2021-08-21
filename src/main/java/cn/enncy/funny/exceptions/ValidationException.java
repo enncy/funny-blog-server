@@ -15,19 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ValidationException extends ServiceException{
 
-    private String paramName;
-    private String exceptionCause;
-
-    public ValidationException(String paramName,String cause) {
-        super("字段"+paramName+"在验证时错误，原因 :"+cause);
-        this.paramName = paramName;
-        this.exceptionCause = cause;
+    public ValidationException(String message) {
+        super(message);
     }
 
-
-
-    @Override
-    public String toString() {
-        return this.exceptionCause;
+    public ValidationException(String message, String detail) {
+        super(message, detail);
     }
 }

@@ -1,8 +1,8 @@
 package cn.enncy.funny;
 
 
-import cn.enncy.funny.controller.ServiceController;
-import cn.enncy.funny.entity.BaseEntity;
+import cn.enncy.funny.controller.service.ServiceController;
+import cn.enncy.funny.pojo.BaseEntity;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;

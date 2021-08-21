@@ -1,20 +1,14 @@
 package cn.enncy.funny;
 
-import cn.enncy.funny.config.HttpErrorStateConverter;
 import cn.enncy.funny.exceptions.EmailException;
 import cn.enncy.funny.utils.MailUtils;
-import cn.enncy.funny.utils.TemplateEngine;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
-import org.apache.velocity.app.VelocityEngine;
+import cn.enncy.funny.utils.SecurityUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.Objects;
+import java.nio.charset.StandardCharsets;
 
 @SpringBootTest
 class FunnyApplicationTests {
@@ -30,19 +24,33 @@ class FunnyApplicationTests {
      */
     @Test
     public void sendSimpleMail() throws EmailException {
-        mailUtil.sendRegisterEmail(receiver,"言小溪222","https://www.zhihu.com/question/20556280");
-        //mailUtil.sendEmailVerified(receiver,"言小溪222","123456");
-        System.out.println("发送成功");
+
     }
 
 }
 
+@Slf4j
 class MyTest {
+    private final String BASE_PACKAGE = "cn.enncy.funny.entity";
+    private final String RESOURCE_PATTERN = "/**/*.class";
+
 
     @Test
-    public void mail() throws IOException {
+    public void main() throws Exception {
+        byte[] encrypt = SecurityUtils.AES.encrypt("123456".getBytes(StandardCharsets.UTF_8));
+        byte[] decrypt = SecurityUtils.AES.decrypt(encrypt);
+        System.out.println(encrypt);
+        System.out.println(new String(encrypt).getBytes());
+        System.out.println(new String(decrypt).getBytes());
+
+    }
+
+    @Test
+    public void tes() throws Exception {
 
 
     }
+
+
 
 }

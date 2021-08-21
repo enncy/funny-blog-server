@@ -1,4 +1,4 @@
-package cn.enncy.funny.entity;
+package cn.enncy.funny.pojo;
 
 
 import io.swagger.annotations.ApiModel;

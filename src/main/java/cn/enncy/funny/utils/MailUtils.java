@@ -1,18 +1,18 @@
 package cn.enncy.funny.utils;
 
 
+import cn.enncy.funny.entity.User;
 import cn.enncy.funny.exceptions.EmailException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.velocity.VelocityContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
-import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.Random;
 
 /**
  * //TODO
@@ -33,6 +33,14 @@ public class MailUtils {
 
     @Autowired
     private JavaMailSender javaMailSender;
+
+    public static String createVerifyCode(int length){
+        StringBuilder code = new StringBuilder();
+        while ( code.length() < length ) {
+            code.append(new Random().nextInt(10));
+        }
+        return code.toString();
+    }
 
 
     public void send(String receiver, String title, String content) throws EmailException {
@@ -59,13 +67,13 @@ public class MailUtils {
     /**
      * 发送注册邮件
      */
-    public void sendRegisterEmail(String receiver, String userName, String verifiedUrl) throws EmailException {
+    public void sendRegisterEmail(User user, String verifiedUrl) throws EmailException {
         VelocityContext context = new VelocityContext();
-        context.put("name", userName);
+        context.put("name", user.getAccount());
         context.put("url", verifiedUrl);
         String render = TemplateEngine.render(context, "templates/mail/register.html");
 
-        this.send(receiver,"账号注册" ,render);
+        this.send(user.getEmail(),"账号注册" ,render);
     }
 
 

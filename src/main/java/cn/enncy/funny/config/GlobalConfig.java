@@ -2,21 +2,29 @@ package cn.enncy.funny.config;
 
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.fastjson.parser.Feature;
-import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.ErrorPageRegistrar;
 import org.springframework.boot.web.server.ErrorPageRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -40,8 +48,13 @@ import java.util.List;
 
 @Configuration
 @EnableOpenApi
-public class GlobalConfig  implements WebMvcConfigurer, ErrorPageRegistrar {
+@EnableWebSecurity
+public class GlobalConfig implements WebMvcConfigurer, ErrorPageRegistrar {
 
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new RequestInterceptor());
+    }
 
     /**
      * 配置连接池
@@ -106,9 +119,6 @@ public class GlobalConfig  implements WebMvcConfigurer, ErrorPageRegistrar {
         FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
         // 设置默认编码
         converter.setDefaultCharset(StandardCharsets.UTF_8);
-        FastJsonConfig config = new FastJsonConfig();
-        config.setFeatures(Feature.IgnoreAutoType,Feature.TrimStringFieldValue);
-        converter.setFastJsonConfig(config);
         // 设置类型
         converter.setSupportedMediaTypes(Collections.singletonList(MediaType.APPLICATION_JSON));
         // 清除所有转换器
@@ -118,17 +128,39 @@ public class GlobalConfig  implements WebMvcConfigurer, ErrorPageRegistrar {
 
 
     /**
-     *
      * 配置错误页面
+     *
      * @param registry ErrorPageRegistry
      * @return: void
      */
     @Override
     public void registerErrorPages(ErrorPageRegistry registry) {
         registry.addErrorPages(Arrays.stream(HttpErrorStateConverter.values())
-                .map(c->c.status)
-                .map(s->new ErrorPage(s, "/error?status=" + s.value()))
+                .map(c -> c.status)
+                .map(s -> new ErrorPage(s, "/error?status=" + s.value()))
                 .toArray(ErrorPage[]::new));
     }
+
+    /**
+     * 修复雪花算法的精度丢失问题
+     *
+     * @param builder
+     * @return: com.fasterxml.jackson.databind.ObjectMapper
+     */
+    @Bean
+    @Primary
+    @ConditionalOnMissingBean(ObjectMapper.class)
+    public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
+        ObjectMapper objectMapper = builder.createXmlMapper(false).build();
+
+        // 全局配置序列化返回 JSON 处理
+        SimpleModule simpleModule = new SimpleModule();
+        //JSON Long ==> String
+        simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
+        objectMapper.registerModule(simpleModule);
+        return objectMapper;
+    }
+
+
 }
 

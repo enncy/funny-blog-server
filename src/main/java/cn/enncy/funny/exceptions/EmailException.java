@@ -7,6 +7,8 @@ package cn.enncy.funny.exceptions;
  *
  * @author: enncy
  */
+
+
 public class EmailException extends ServiceException{
     public EmailException(String message) {
         super(message);

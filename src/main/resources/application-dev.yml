@@ -1,0 +1,31 @@
+
+
+spring:
+  devtools:
+    restart:
+      enabled: true  # 热部署
+  datasource:
+    url: jdbc:mysql://localhost:3306/funny_db?useSSL=false&charactorEncoding=utf8&serverTimezone=UTC
+    username: root
+    password: enncymysql
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  mail:
+    host: smtp.163.com
+    password:  RJMVNHFAKLLPHFEP
+    username: enncyfunnyblog@163.com
+    protocol: smtp
+  security:
+    user:
+      name: enncy
+      password: ll877526278
+      roles: admin
+
+server:
+  port: 8999  # 服务器启动端口
+
+
+springfox:
+  documentation:
+    swagger-ui:
+      enabled: true
+      base-url:

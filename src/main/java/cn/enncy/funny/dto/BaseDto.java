@@ -1,7 +1,7 @@
 package cn.enncy.funny.dto;
 
 
-import cn.enncy.funny.entity.BaseEntity;
+import cn.enncy.funny.pojo.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -18,9 +18,10 @@ import lombok.Data;
 public class BaseDto<T extends BaseEntity> {
 
     @ApiModelProperty("唯一id字段")
-    public Integer id;
+    public Long id;
 
     @ApiModelProperty("传输对象")
     public T target;
+
 
 }

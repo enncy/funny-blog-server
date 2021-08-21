@@ -1,8 +1,6 @@
 package cn.enncy.funny.entity;
 
-import cn.enncy.funny.constant.EmailType;
-import cn.enncy.funny.exceptions.ValidationException;
-import com.alibaba.fastjson.annotation.JSONField;
+import cn.enncy.funny.pojo.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -19,28 +17,30 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "User对象", description = "用户表")
-public class User extends BaseEntity {
+public class User extends BaseEntity<User> {
 
-    @JSONField(serialize = false)
     @ApiModelProperty("密码")
     private String password;
+
 
     @ApiModelProperty("账号")
     private String account;
 
-    @ApiModelProperty("qq邮箱")
+
+    @ApiModelProperty("邮箱")
     private String email;
+
 
     @ApiModelProperty("昵称")
     private String nickName;
 
+    @ApiModelProperty(value = "权限", hidden = true)
+    private String role;
 
-    public void setEmail(String email) throws Exception {
-        if(email.contains(EmailType.Domain.QQ.value)){
-            this.email = email;
-        }else{
-            throw new ValidationException("email","不支持的邮箱后缀名");
-        }
 
+    @Override
+    public User filter() {
+        this.setPassword(null);
+        return super.filter();
     }
 }

@@ -3,8 +3,7 @@ package cn.enncy.funny.config;
 
 import cn.enncy.funny.annotation.ResponseHandler;
 import cn.enncy.funny.exceptions.ServiceException;
-import cn.enncy.funny.exceptions.ValidationException;
-import cn.enncy.funny.entity.Result;
+import cn.enncy.funny.pojo.Result;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -32,17 +30,19 @@ import java.util.Optional;
 @RestControllerAdvice
 public class ResponseInterceptor implements ResponseBodyAdvice<Object> {
 
+    HttpServletResponse response;
+
+    public ResponseInterceptor(HttpServletResponse response) {
+        this.response = response;
+    }
+
     @Override
     public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
         return true;
     }
 
-    @Autowired
-    HttpServletResponse response;
-
     @Override
     public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType, Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
-
 
         HttpStatus status = Optional.ofNullable(HttpStatus.resolve(response.getStatus())).orElse(HttpStatus.NOT_FOUND);
 
@@ -69,7 +69,6 @@ public class ResponseInterceptor implements ResponseBodyAdvice<Object> {
             }
             return result;
         } else if (methodParameter.getDeclaringClass().isAnnotationPresent(ResponseHandler.class)) {
-
             Method method = methodParameter.getMethod();
             if (method == null) {
                 return o;

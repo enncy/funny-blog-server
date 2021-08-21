@@ -1,8 +1,11 @@
-package cn.enncy.funny.entity;
+package cn.enncy.funny.pojo;
 
 
+import cn.enncy.funny.entity.User;
 import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.ToStringSerializer;
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -16,19 +19,19 @@ import lombok.Data;
 
 @Data
 @ApiModel(value = "基础实体对象", description = "基础实体对象")
-public class BaseEntity {
+public class BaseEntity<T> {
 
     @ApiModelProperty(value = "自增主键", hidden = true)
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JSONField(serializeUsing =  ToStringSerializer.class)
     @TableId(value = "id", type = IdType.ASSIGN_ID)
-    public Integer id;
+    public Long id;
 
 
-    @JSONField(serialize = false)
     @ApiModelProperty(value = "乐观锁", hidden = true)
     @Version
     public Integer version;
 
-    @JSONField(serialize = false)
     @ApiModelProperty(value = "逻辑删除", hidden = true)
     @TableLogic
     public Integer deleted;
@@ -40,4 +43,11 @@ public class BaseEntity {
     @ApiModelProperty(value = "更新时间", hidden = true)
     @TableField(fill = FieldFill.INSERT_UPDATE)
     public Long updateTime;
+
+    public T filter(){
+        this.setVersion(null);
+        this.setDeleted(null);
+        this.setId(null);
+        return (T) this;
+    }
 }
