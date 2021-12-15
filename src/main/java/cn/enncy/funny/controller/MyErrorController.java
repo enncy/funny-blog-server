@@ -2,7 +2,7 @@ package cn.enncy.funny.controller;
 
 
 import cn.enncy.funny.annotation.ResponseHandler;
-import cn.enncy.funny.config.HttpErrorStateConverter;
+import cn.enncy.funny.constant.HttpErrorStateConverter;
 import cn.enncy.funny.exceptions.ServiceException;
 import cn.enncy.funny.handler.SqlExceptionHandler;
 import io.swagger.annotations.Api;
@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 
 /**
@@ -28,19 +29,33 @@ public class MyErrorController implements ErrorController {
 
     SqlExceptionHandler sqlExceptionHandler;
 
-    public MyErrorController(SqlExceptionHandler sqlExceptionHandler) {
+    private HttpServletResponse response;
+
+
+    public MyErrorController(SqlExceptionHandler sqlExceptionHandler,HttpServletResponse response) {
         this.sqlExceptionHandler = sqlExceptionHandler;
+        this.response = response;
     }
 
+
+    /**
+     *  处理业务报错
+     */
     @ExceptionHandler(value = ServiceException.class)
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public Throwable error(Exception e) {
-        return findCause(e);
+    public ServiceException error(Exception e) {
+        return (ServiceException) findCause(e);
     }
 
+    /**
+     *  一般处理 json 在转换时出现的数据问题
+     */
     @ExceptionHandler(value = HttpMessageNotReadableException.class)
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public String notReadable() {
+    public String notReadable(Exception e) {
+        Throwable cause = findCause(e);
+        if(cause instanceof  ServiceException){
+            return cause.getMessage();
+        }
+
         return "错误的参数!";
     }
 

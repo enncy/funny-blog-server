@@ -1,7 +1,8 @@
-package cn.enncy.funny.pojo;
+package cn.enncy.funny.entity;
 
 
 import cn.enncy.funny.entity.User;
+import cn.enncy.funny.exceptions.ServiceException;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.serializer.ToStringSerializer;
 import com.baomidou.mybatisplus.annotation.*;
@@ -25,29 +26,18 @@ public class BaseEntity<T> {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JSONField(serializeUsing =  ToStringSerializer.class)
     @TableId(value = "id", type = IdType.ASSIGN_ID)
-    public Long id;
-
+    private Long id;
 
     @ApiModelProperty(value = "乐观锁", hidden = true)
     @Version
-    public Integer version;
-
-    @ApiModelProperty(value = "逻辑删除", hidden = true)
-    @TableLogic
-    public Integer deleted;
+    private Integer version;
 
     @ApiModelProperty(value = "插入时间", hidden = true)
     @TableField(fill = FieldFill.INSERT)
-    public Long createTime;
+    private Long createTime;
 
     @ApiModelProperty(value = "更新时间", hidden = true)
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    public Long updateTime;
+    private Long updateTime;
 
-    public T filter(){
-        this.setVersion(null);
-        this.setDeleted(null);
-        this.setId(null);
-        return (T) this;
-    }
 }

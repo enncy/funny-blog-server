@@ -1,22 +1,24 @@
-package cn.enncy.funny.controller.service;
+package cn.enncy.funny.controller;
 
 
 import cn.enncy.funny.annotation.ResponseHandler;
 import cn.enncy.funny.annotation.Roles;
 import cn.enncy.funny.constant.Role;
-import cn.enncy.funny.exceptions.RequestException;
-import cn.enncy.funny.exceptions.ServiceException;
-import cn.enncy.funny.pojo.BaseEntity;
 import cn.enncy.funny.dto.BaseDto;
+import cn.enncy.funny.entity.User;
+import cn.enncy.funny.exceptions.ServiceException;
+import cn.enncy.funny.entity.BaseEntity;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.swagger.annotations.ApiOperation;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * //TODO
@@ -31,31 +33,33 @@ public class ServiceController<T extends BaseEntity<T>> {
 
     protected IService<T> service;
 
+    @Autowired
+    public HttpSession session;
+
     public ServiceController(IService<T> service) {
         this.service = service;
     }
-
 
     @ApiOperation("根据id查询实体")
     @GetMapping("/get/one")
     @Roles(value = {Role.ROOT})
     public T selectById(@RequestParam("id") Long id) throws ServiceException {
         checkExist(id);
-        return service.getById(id).filter();
+        return service.getById(id);
     }
 
     @ApiOperation("获取全部信息")
     @GetMapping("/get/all")
     @Roles(value = {Role.ROOT})
     public List<T> selectAll(){
-        return service.list().stream().map(T::filter).collect(Collectors.toList());
+        return service.list();
     }
 
     @ApiOperation("根据数量查询")
     @GetMapping("/get/page")
     @Roles(value = {Role.ROOT})
     public List<T> selectPage(@RequestParam("current") int current, @RequestParam("size") int size){
-        return service.page(new Page<>(current,size)).getRecords().stream().map(T::filter).collect(Collectors.toList());
+        return service.page(new Page<>(current,size)).getRecords();
     }
 
     @ApiOperation("保存信息")
@@ -67,16 +71,16 @@ public class ServiceController<T extends BaseEntity<T>> {
 
     @ApiOperation("根据id更新")
     @PostMapping("/update")
-    @Roles(value = {Role.USER})
-    public boolean updateById(@RequestBody  BaseDto<T> dto) throws Exception {
+    @Roles(value = {Role.ROOT})
+    public boolean update(@RequestBody  BaseDto<T> dto) throws ServiceException {
         checkExist(dto.getId());
-        dto.target.setId(dto.getId());
-        return service.updateById(dto.target);
+        dto.getTarget().setId(dto.getId());
+        return service.updateById(dto.getTarget());
     }
 
     @ApiOperation("根据id删除")
     @GetMapping("/delete")
-    @Roles(value = {Role.USER})
+    @Roles(value = {Role.ROOT})
     public boolean removeById(@RequestParam("id") Long id) throws ServiceException {
         checkExist(id);
         return service.removeById(id);
@@ -89,12 +93,22 @@ public class ServiceController<T extends BaseEntity<T>> {
         return service.count();
     }
 
+
     public T checkExist(Long id) throws ServiceException {
         T byId = service.getById(id);
         if(byId==null){
             throw new ServiceException("此id不存在");
         }
         return byId;
+    }
+
+    public User checkUserRoles(Long id) throws ServiceException {
+        User user = (User) session.getAttribute("user");
+        if(!user.getId().equals(id)){
+            throw new ServiceException("权限不足！");
+        }else{
+            return user;
+        }
     }
 
 }

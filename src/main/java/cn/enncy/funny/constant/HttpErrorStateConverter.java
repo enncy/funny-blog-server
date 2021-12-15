@@ -1,4 +1,4 @@
-package cn.enncy.funny.config;
+package cn.enncy.funny.constant;
 
 
 import org.springframework.http.HttpStatus;

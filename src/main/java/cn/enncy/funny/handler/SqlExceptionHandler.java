@@ -2,13 +2,12 @@ package cn.enncy.funny.handler;
 
 
 import cn.enncy.funny.annotation.HandleSqlException;
-import cn.enncy.funny.pojo.BaseEntity;
+import cn.enncy.funny.entity.BaseEntity;
 import cn.enncy.funny.utils.ClassScanner;
 import cn.enncy.funny.utils.StringUtils;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.stereotype.Component;
 
-import java.lang.annotation.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

@@ -1,8 +1,8 @@
 package cn.enncy.funny;
 
 
-import cn.enncy.funny.controller.service.ServiceController;
-import cn.enncy.funny.pojo.BaseEntity;
+import cn.enncy.funny.controller.ServiceController;
+import cn.enncy.funny.entity.BaseEntity;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -39,7 +39,7 @@ public class MyCodeGenerator {
     // 包名
     private static final String packageName = "cn.enncy";
     // 要生成的表名
-    private static final String[] tableNames = {"user"};
+    private static final String[] tableNames = {"blog","user_info","blog_operation"};
 
     @Test
     public  void generate() {

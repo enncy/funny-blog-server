@@ -1,12 +1,11 @@
-package cn.enncy.funny.config;
+package cn.enncy.funny.aspect;
 
 
 import cn.enncy.funny.annotation.ResponseHandler;
 import cn.enncy.funny.exceptions.ServiceException;
-import cn.enncy.funny.pojo.Result;
+import cn.enncy.funny.bean.Result;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -48,43 +47,47 @@ public class ResponseInterceptor implements ResponseBodyAdvice<Object> {
 
         Result<Object> result = new Result<>();
         // 设置响应码
-        result.setStatus(response.getStatus());
+        result.setStatus(200);
+        response.setStatus(200);
+
         boolean error = status.isError();
         // 设置请求是否成功
         result.setSuccess(!error);
 
-        if (error) {
-
-            if(o instanceof ServiceException){
-                ServiceException exception = (ServiceException) o;
-                // 响应数据置空
-                result.setData(exception.getDetail());
-                // 响应错误信息
-                result.setMsg(exception.getMessage());
-            }else{
+        if(o instanceof ServiceException){
+            ServiceException exception = (ServiceException) o;
+            // 响应数据置空
+            result.setData(exception.getDetail());
+            // 响应错误信息
+            result.setMsg(exception.getMessage());
+            result.setSuccess(false);
+            return result;
+        }else {
+            if (error) {
                 // 响应数据置空
                 result.setData(null);
                 // 响应错误信息
                 result.setMsg(o.toString());
-            }
-            return result;
-        } else if (methodParameter.getDeclaringClass().isAnnotationPresent(ResponseHandler.class)) {
-            Method method = methodParameter.getMethod();
-            if (method == null) {
-                return o;
-            } else {
-                // 如果存在 Api 注释，则返回注释和其他信息，否则返回简单的"请求" 描述 请求成功或者失败
-                String preMsg = Optional.ofNullable(method.getAnnotation(ApiOperation.class)).map(ApiOperation::value).orElse("请求");
-                //设置响应信息
-                result.setMsg(preMsg + "成功");
-                // 设置响应数据
-                result.setData(o);
 
                 return result;
-            }
+            } else if (methodParameter.getDeclaringClass().isAnnotationPresent(ResponseHandler.class)) {
+                Method method = methodParameter.getMethod();
+                if (method == null) {
+                    return o;
+                } else {
+                    // 如果存在 Api 注释，则返回注释和其他信息，否则返回简单的"请求" 描述 请求成功或者失败
+                    String preMsg = Optional.ofNullable(method.getAnnotation(ApiOperation.class)).map(ApiOperation::value).orElse("请求");
+                    //设置响应信息
+                    result.setMsg(preMsg + "成功");
+                    // 设置响应数据
+                    result.setData(o);
 
-        } else {
-            return o;
+                    return result;
+                }
+
+            } else {
+                return o;
+            }
         }
     }
 }

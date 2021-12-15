@@ -4,13 +4,10 @@ import cn.enncy.funny.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * <p>
- * 用户表 Mapper 接口
- * </p>
+ * //TODO
+ * <br/>Created in 11:07 2021/8/22
  *
- * @author enncy
- * @since 2021-08-16
+ * @author: enncy
  */
-public interface UserMapper extends BaseMapper<User> {
-
+public interface UserMapper  extends BaseMapper<User> {
 }

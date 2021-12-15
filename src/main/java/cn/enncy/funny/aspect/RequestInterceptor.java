@@ -1,4 +1,4 @@
-package cn.enncy.funny.config;
+package cn.enncy.funny.aspect;
 
 
 import cn.enncy.funny.annotation.Roles;
@@ -23,6 +23,8 @@ public class RequestInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
+
 
         if(handler instanceof HandlerMethod){
             Method method = ((HandlerMethod) handler).getMethod();

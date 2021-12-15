@@ -1,4 +1,4 @@
-package cn.enncy.funny.pojo;
+package cn.enncy.funny.bean;
 
 
 import lombok.Data;
@@ -30,4 +30,5 @@ public class EmailValidator {
     public boolean isOutOfTime(long limit){
         return System.currentTimeMillis() - this.time > limit;
     }
+
 }

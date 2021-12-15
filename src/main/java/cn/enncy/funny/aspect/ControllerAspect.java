@@ -1,4 +1,4 @@
-package cn.enncy.funny.config;
+package cn.enncy.funny.aspect;
 
 
 import cn.enncy.funny.annotation.Roles;
@@ -34,10 +34,12 @@ public class ControllerAspect {
     @Autowired
     HttpServletRequest request;
 
+
+
     @Around("execution(* cn.enncy.funny.controller.service.*.*(..))")
     public Object handler(ProceedingJoinPoint pjp) throws Throwable {
         log.info("#--------------------------------#");
-        log.info("# 请求路径 : " + request.getMethod() + " " + StringUtils.getRquestBaseUrl(request) + request.getServletPath());
+        log.info("# 请求路径 : " + request.getMethod() + " " + StringUtils.getRequestBaseUrl(request) + request.getServletPath());
         log.info("# 处理程序 : " + pjp.getTarget());
 
         Method[] methods = pjp.getTarget().getClass().getDeclaredMethods();
