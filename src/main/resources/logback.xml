@@ -68,4 +68,9 @@
         <appender-ref ref="ERROR_FILE" />
     </root>
 
+    <logger name="cn.enncy.funny.mapper" level="DEBUG">
+        <appender-ref ref="INFO_FILE" />
+    </logger>
+
+
 </configuration>

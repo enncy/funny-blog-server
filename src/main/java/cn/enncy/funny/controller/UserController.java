@@ -55,15 +55,6 @@ public class UserController extends ServiceController<User> {
         return "邮箱可用";
     }
 
-    @ApiOperation("密码检验")
-    @GetMapping("/check/password")
-    public String checkPassword(@RequestParam("password") String password) throws ServiceException {
-        User user = new User();
-        user.setPassword(password);
-        return "密码可用";
-    }
-
-
     @ApiOperation("账号检验")
     @GetMapping("/check/account")
     public String checkAccount(@RequestParam("account") String account) throws ServiceException {
@@ -75,9 +66,20 @@ public class UserController extends ServiceController<User> {
 
 
     @ApiOperation("账号登录")
-    @GetMapping("/login")
-    public User login(@RequestParam("account") String account, @RequestParam("password") String password) throws ServiceException {
+    @GetMapping("/login/by/account")
+    public User loginByAccount(@RequestParam("account") String account, @RequestParam("password") String password) throws ServiceException {
         User user = service.lambdaQuery().eq(User::getAccount, account).one();
+        return login(user, password);
+    }
+
+    @ApiOperation("账号登录")
+    @GetMapping("/login/by/email")
+    public User loginByEmail(@RequestParam("email") String email, @RequestParam("code") String code) throws ServiceException {
+        User user = service.lambdaQuery().eq(User::getEmail, email).eq(User::getPassword, code).one();
+        return login(user, code);
+    }
+
+    public User login(User user, String password) throws ServiceException {
         if (user == null || !user.getPassword().equals(password)) {
             throw new ServiceException("账号或密码错误！");
         }
@@ -120,7 +122,7 @@ public class UserController extends ServiceController<User> {
             // 对 AES 进行解码
             User user = JSONObject.parseObject(SecurityUtils.AES.decrypt(bytes), User.class);
             User one = userService.lambdaQuery().eq(User::getAccount, user.getAccount()).one();
-            if(one!=null){
+            if (one != null) {
                 throw new ServiceException("账号已经存在");
             }
             service.save(user);
@@ -134,18 +136,20 @@ public class UserController extends ServiceController<User> {
 
     @PostMapping("/register")
     @ApiOperation("发送注册验证邮箱")
-    public String emailRegister(@RequestBody User user,@RequestParam("confirmPassword") String confirmPassword , HttpServletRequest request) throws Exception {
-        if(confirmPassword.equals(user.getPassword())){
+    public String emailRegister(@RequestBody User user, @RequestParam("confirmPassword") String confirmPassword, HttpServletRequest request) throws Exception {
+        if (confirmPassword.equals(user.getPassword())) {
+
             String userInfo = JSONObject.toJSONString(user);
+            long l = System.currentTimeMillis();
             // 对信息进行 AES 加密
             byte[] encrypt = SecurityUtils.AES.encrypt(userInfo.getBytes());
             String base64 = SecurityUtils.BASE64.encode(Arrays.toString(encrypt));
             // MD5 加密
-            String md5 = SecurityUtils.MD5.encryption(base64);
+            String md5 = SecurityUtils.MD5.encryption(base64,l);
             // 发送MD5加密验证和 用户加密信息
-            String path = StringUtils.getRequestBaseUrl(request) + "/user/register/check?token=" + md5 + "&info=" + base64;
+            String path = StringUtils.getRequestBaseUrl(request) + "/user/register/check?token=" + md5 + "&time=" + System.currentTimeMillis() + "&info=" + base64;
             mailUtil.sendRegisterEmail(user, path);
-        }else{
+        } else {
             throw new ServiceException("2次密码不一致");
         }
         return "发送注册邮箱成功，请尽快前往您的邮箱验证";

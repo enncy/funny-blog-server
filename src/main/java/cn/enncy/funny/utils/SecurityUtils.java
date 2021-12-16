@@ -14,42 +14,49 @@ import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Locale;
 
 /**
  * 加密解密工具类
+ *
  * @author: enncy
  */
 public class SecurityUtils {
 
-    private static final String  KEY = "db6c6c411bb7467e996fbd5fda687b18";
+    private static final String KEY = "db6c6c411bb7467e996fbd5fda687b18";
 
-    public static class BASE64{
+    public static class BASE64 {
 
         public static String encode(String str) {
             return Base64.getEncoder().encodeToString(str.getBytes());
         }
 
-        public static String decode(String str)  {
+        public static String decode(String str) {
             return new String(Base64.getDecoder().decode(str));
 
         }
     }
 
-    public static class MD5{
+    public static class MD5 {
         /**
-         *  MD5 加密
-         * @param str  被加密的字符串
+         * MD5 加密
+         *
+         * @param str 被加密的字符串
          * @return: java.lang.String
          */
+        public static String encryption(String str, Long time) throws UnsupportedEncodingException {
+            String s = URLEncoder.encode((str + time + KEY), "utf-8").toLowerCase(Locale.ROOT);
+            return DigestUtils.md5DigestAsHex(s.getBytes(StandardCharsets.UTF_8));
+        }
         public static String encryption(String str) throws UnsupportedEncodingException {
-            return  DigestUtils.md5DigestAsHex(URLEncoder.encode((str + KEY), "utf-8").getBytes(StandardCharsets.UTF_8));
+            String s = URLEncoder.encode((str + KEY), "utf-8").toLowerCase(Locale.ROOT);
+            return DigestUtils.md5DigestAsHex(s.getBytes(StandardCharsets.UTF_8));
 
         }
-
         /**
-         *  对 json 字符串加密
+         * 对 json 字符串加密
          *
-         * @param jsonStr  被加密的 json 字符串
+         * @param jsonStr 被加密的 json 字符串
          * @return: java.lang.String
          */
         public static String encryptionJSON(String jsonStr) throws UnsupportedEncodingException {
@@ -60,7 +67,7 @@ public class SecurityUtils {
         }
     }
 
-    public static class AES{
+    public static class AES {
 
 
         /**

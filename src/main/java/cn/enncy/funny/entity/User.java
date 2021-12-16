@@ -58,7 +58,7 @@ public class User extends BaseEntity<User> {
     }
 
     public void setNickName(String nickName) throws ServiceException {
-        if(StringUtils.notEmpty(password) && StringUtils.lengthConverter(nickName) > 20){
+        if(StringUtils.notEmpty(nickName) && StringUtils.outOfRange(nickName,0,20)){
             throw new ServiceException("昵称不能大于20个字符(中文占2个)");
         }
         this.nickName = nickName;
@@ -69,8 +69,8 @@ public class User extends BaseEntity<User> {
         if(StringUtils.isEmpty(account)){
             throw new ServiceException("密码不能为空");
         }
-        if(StringUtils.outOfRange(account,4,16,true)){
-            throw new ServiceException("账号至少 4-16 个字符 (中文占2个)");
+        if(StringUtils.outOfRange(account,4,20)){
+            throw new ServiceException("账号至少 4-20 个字符");
         }
         if(StringUtils.hasSpecialCharacters(account)){
             throw new ServiceException("账号不能存在特殊字符");

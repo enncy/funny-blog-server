@@ -7,10 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.DigestUtils;
 
 import java.net.InetAddress;
+import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 @SpringBootTest
 class FunnyApplicationTests {
@@ -55,7 +59,13 @@ class MyTest {
 
     @Test
     public void tes() throws Exception {
-
+        String m = URLEncoder.encode("{\"account\":\"enncy\",\"password\":\"132525\",\"time\":\"1639662647115\"}", "utf-8").toLowerCase(Locale.ROOT);
+        System.out.println(m);
+        System.out.println(DigestUtils.md5DigestAsHex(m.getBytes(StandardCharsets.UTF_8)));
+    }
+    @Test
+    public void t(){
+        System.out.println(TimeUnit.HOURS.toMillis(1));
     }
 
     @Test

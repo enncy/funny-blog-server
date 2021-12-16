@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession;
 
 @RestController
 @ResponseHandler
-@RequestMapping(value = "/mail")
+@RequestMapping(value = "/email")
 @Api(tags = "邮件检验及发送")
 public class EmailController {
 
@@ -60,7 +60,7 @@ public class EmailController {
         EmailValidator validator = (EmailValidator) session.getAttribute(VALIDATOR_NAME);
 
         Object verifiedCode = session.getAttribute(VERIFIED_CODE);
-
+        System.out.println(verifiedCode);
         // 如果验证过的码存，并且和当前的码一样，则报错
         if (verifiedCode != null && String.valueOf(verifiedCode).equals(code)) {
             throw new ServiceException("此验证码已经被使用过了！");
@@ -87,8 +87,6 @@ public class EmailController {
     @GetMapping("/send/verify")
     @ApiOperation("发送验证码")
     public String sendVerifyCode(@RequestParam("email") String email) throws ServiceException {
-
-
         // 是否存在验证码
         if (session.getAttribute(VALIDATOR_NAME) != null) {
             EmailValidator validator = (EmailValidator) session.getAttribute(VALIDATOR_NAME);

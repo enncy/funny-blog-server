@@ -29,3 +29,7 @@ springfox:
     swagger-ui:
       enabled: true
       base-url:
+
+logging:
+  config: classpath:logback.xml
+

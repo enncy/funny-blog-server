@@ -37,7 +37,6 @@ public class MyErrorController implements ErrorController {
         this.response = response;
     }
 
-
     /**
      *  处理业务报错
      */
