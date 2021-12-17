@@ -45,11 +45,12 @@ public class SecurityUtils {
          * @return: java.lang.String
          */
         public static String encryption(String str, Long time) throws UnsupportedEncodingException {
-            String s = URLEncoder.encode((str + time + KEY), "utf-8").toLowerCase(Locale.ROOT);
-            return DigestUtils.md5DigestAsHex(s.getBytes(StandardCharsets.UTF_8));
+            System.out.println(str);
+            return encryption(str + time);
         }
         public static String encryption(String str) throws UnsupportedEncodingException {
             String s = URLEncoder.encode((str + KEY), "utf-8").toLowerCase(Locale.ROOT);
+
             return DigestUtils.md5DigestAsHex(s.getBytes(StandardCharsets.UTF_8));
 
         }

@@ -54,7 +54,6 @@ public class MyErrorController implements ErrorController {
         if(cause instanceof  ServiceException){
             return cause.getMessage();
         }
-
         return "错误的参数!";
     }
 

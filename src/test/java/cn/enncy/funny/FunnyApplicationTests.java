@@ -3,6 +3,8 @@ package cn.enncy.funny;
 import cn.enncy.funny.exceptions.EmailException;
 import cn.enncy.funny.utils.EmailUtils;
 import cn.enncy.funny.utils.SecurityUtils;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +67,7 @@ class MyTest {
     }
     @Test
     public void t(){
-        System.out.println(TimeUnit.HOURS.toMillis(1));
+        System.out.println(JSON.toJSONString(JSON.parseObject("{\"confirmPassword\":\"132525\",\"password\":\"132525\",\"nickName\":\"\",\"account\":\"enncy\",\"email\":\"877526278@qq.com\"}"), SerializerFeature.MapSortField));
     }
 
     @Test

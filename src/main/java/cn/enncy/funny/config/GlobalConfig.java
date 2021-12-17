@@ -1,6 +1,7 @@
 package cn.enncy.funny.config;
 
 
+import cn.enncy.funny.aspect.BodyReaderFilter;
 import cn.enncy.funny.aspect.RequestInterceptor;
 import cn.enncy.funny.constant.HttpErrorStateConverter;
 import com.alibaba.druid.pool.DruidDataSource;
@@ -17,6 +18,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.ErrorPageRegistrar;
 import org.springframework.boot.web.server.ErrorPageRegistry;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -185,5 +187,20 @@ public class GlobalConfig implements WebMvcConfigurer, ErrorPageRegistrar {
     public void setUsePingMethod(){
         System.setProperty("druid.mysql.usePingMethod", "false");
     }
+
+    /**
+     *  注册 body filter ， 解决 request 请求流只能读一次的问题
+     *
+     * @return org.springframework.boot.web.servlet.FilterRegistrationBean<cn.enncy.funny.aspect.BodyReaderFilter>
+     */
+    @Bean
+    public FilterRegistrationBean<BodyReaderFilter> filters() {
+        FilterRegistrationBean<BodyReaderFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new BodyReaderFilter());
+        registrationBean.addUrlPatterns("/*");
+        registrationBean.setName("body");
+        return registrationBean;
+    }
+
 }
 

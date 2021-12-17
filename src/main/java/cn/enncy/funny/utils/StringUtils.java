@@ -4,8 +4,12 @@ package cn.enncy.funny.utils;
 import cn.enncy.funny.exceptions.ServiceException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * //TODO
@@ -81,25 +85,63 @@ public class StringUtils {
         return str == null || str.length() == 0;
     }
 
-    public static boolean outOfRange(String str, int l, int r,boolean zhCN) {
+
+    /**
+     * 判断是否超出范围
+     *
+     * @param str  字符串
+     * @param min  最小值
+     * @param max  最大值
+     * @param zhCN 是否计入中文
+     * @return boolean
+     */
+    public static boolean outOfRange(String str, int min, int max, boolean zhCN) {
         if (isEmpty(str)) {
             return true;
         }
-        if(zhCN){
-            if (lengthConverter(str) < l || lengthConverter(str) > r) {
+        if (zhCN) {
+            if (lengthConverter(str) < min || lengthConverter(str) > max) {
                 return true;
             }
 
-        }else{
-            if (str.length() < l || str.length() > r) {
+        } else {
+            if (str.length() < min || str.length() > max) {
                 return true;
             }
         }
 
         return false;
     }
-    public static boolean outOfRange(String str, int l, int r) {
-        return outOfRange(str,l,r,false);
+
+    /**
+     * 判断是否超出范围
+     *
+     * @param str 字符串
+     * @param min 最小值
+     * @param max 最大值
+     * @return boolean
+     */
+    public static boolean outOfRange(String str, int min, int max) {
+        return outOfRange(str, min, max, false);
     }
 
+
+    /**
+     * 根据 map 创建 query string
+     *
+     * @param map map
+     * @return java.lang.String
+     */
+    public static String createQueryString(Map<String, Object> map) {
+        return map.entrySet().stream().map(k -> encode(k.getKey()) + "=" + encode(k.getValue().toString())).collect(Collectors.joining("&"));
+    }
+
+    public static String encode(String str) {
+        try {
+            return URLEncoder.encode(str, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 }
