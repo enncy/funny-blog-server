@@ -28,7 +28,7 @@ import java.util.List;
  */
 
 @ResponseHandler
-public class ServiceController<T extends BaseEntity<T>> {
+public class ServiceController<T extends BaseEntity> {
 
 
     protected IService<T> service;
@@ -56,10 +56,10 @@ public class ServiceController<T extends BaseEntity<T>> {
     }
 
     @ApiOperation("根据数量查询")
-    @GetMapping("/get/page")
+    @GetMapping("/list")
     @Roles(value = {Role.ROOT})
-    public List<T> selectPage(@RequestParam("current") int current, @RequestParam("size") int size){
-        return service.page(new Page<>(current,size)).getRecords();
+    public List<T> list(@RequestParam("page") int page, @RequestParam("size") int size){
+        return service.page(new Page<>(page,size)).getRecords();
     }
 
     @ApiOperation("保存信息")
@@ -72,10 +72,8 @@ public class ServiceController<T extends BaseEntity<T>> {
     @ApiOperation("根据id更新")
     @PostMapping("/update")
     @Roles(value = {Role.ROOT})
-    public boolean update(@RequestBody  BaseDto<T> dto) throws ServiceException {
-        checkExist(dto.getId());
-        dto.getTarget().setId(dto.getId());
-        return service.updateById(dto.getTarget());
+    public boolean update(@RequestBody T target) throws ServiceException {
+        return service.updateById(target);
     }
 
     @ApiOperation("根据id删除")
@@ -100,15 +98,6 @@ public class ServiceController<T extends BaseEntity<T>> {
             throw new ServiceException("此id不存在");
         }
         return byId;
-    }
-
-    public User checkUserRoles(Long id) throws ServiceException {
-        User user = (User) session.getAttribute("user");
-        if(!user.getId().equals(id)){
-            throw new ServiceException("权限不足！");
-        }else{
-            return user;
-        }
     }
 
 }

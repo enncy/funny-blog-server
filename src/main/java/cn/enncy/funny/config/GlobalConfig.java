@@ -2,7 +2,9 @@ package cn.enncy.funny.config;
 
 
 import cn.enncy.funny.aspect.BodyReaderFilter;
+import cn.enncy.funny.aspect.CorsInterceptor;
 import cn.enncy.funny.aspect.RequestInterceptor;
+import cn.enncy.funny.aspect.TokenCheckInterceptor;
 import cn.enncy.funny.constant.HttpErrorStateConverter;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
@@ -25,9 +27,11 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -38,6 +42,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
@@ -57,7 +62,13 @@ public class GlobalConfig implements WebMvcConfigurer, ErrorPageRegistrar {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        // 跨域过滤器
+        registry.addInterceptor(new CorsInterceptor());
+        // token 检验器
+        registry.addInterceptor(new TokenCheckInterceptor());
+        // 全局过滤器
         registry.addInterceptor(new RequestInterceptor());
+
     }
 
     /**
@@ -86,6 +97,7 @@ public class GlobalConfig implements WebMvcConfigurer, ErrorPageRegistrar {
         interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
         return interceptor;
     }
+
 
     /**
      * swagger 配置
@@ -166,30 +178,13 @@ public class GlobalConfig implements WebMvcConfigurer, ErrorPageRegistrar {
     }
 
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        //添加映射路径
-        registry.addMapping("/**")
-                //是否发送Cookie
-                .allowCredentials(true)
-                //设置放行哪些原始域   SpringBoot2.4.4下低版本使用.allowedOrigins("*")
-                .allowedOriginPatterns("*")
-                //放行哪些请求方式
-                .allowedMethods("GET", "POST","OPTIONS")
-                //.allowedMethods("*") //或者放行全部
-                //放行哪些原始请求头部信息
-                .allowedHeaders("*")
-                //暴露哪些原始请求头部信息
-                .exposedHeaders("*");
-    }
-
     @PostConstruct
-    public void setUsePingMethod(){
+    public void setUsePingMethod() {
         System.setProperty("druid.mysql.usePingMethod", "false");
     }
 
     /**
-     *  注册 body filter ， 解决 request 请求流只能读一次的问题
+     * 注册 body filter ， 解决 request 请求流只能读一次的问题
      *
      * @return org.springframework.boot.web.servlet.FilterRegistrationBean<cn.enncy.funny.aspect.BodyReaderFilter>
      */

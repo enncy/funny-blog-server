@@ -27,4 +27,6 @@ public class Result<T> {
 
     @ApiModelProperty(value = "响应数据")
     private T data;
+
+
 }

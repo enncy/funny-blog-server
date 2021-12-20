@@ -1,0 +1,15 @@
+16:27:26.664 [restartedMain] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 2 of constructor in cn.enncy.funny.controller.EmailController required a bean of type 'cn.enncy.funny.service.UserService' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'cn.enncy.funny.service.UserService' in your configuration.
+

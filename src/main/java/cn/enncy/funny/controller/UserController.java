@@ -5,24 +5,18 @@ import cn.enncy.funny.annotation.ResponseHandler;
 import cn.enncy.funny.annotation.Roles;
 import cn.enncy.funny.constant.Role;
 import cn.enncy.funny.dto.BaseDto;
+import cn.enncy.funny.dto.UserRegisterDto;
+import cn.enncy.funny.dto.UserResetPasswordDto;
 import cn.enncy.funny.entity.User;
 import cn.enncy.funny.exceptions.ServiceException;
 import cn.enncy.funny.service.UserService;
 import cn.enncy.funny.utils.EmailUtils;
-import cn.enncy.funny.utils.SecurityUtils;
-import cn.enncy.funny.utils.StringUtils;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.extension.service.IService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * <p>
@@ -38,14 +32,30 @@ import java.util.stream.Collectors;
 @Api(tags = "用户操作")
 public class UserController extends ServiceController<User> {
 
-    private UserService userService;
-
+    private final UserService userService;
+    private final HttpSession session;
+    private final HttpServletResponse response;
     private final EmailUtils mailUtil;
+    private final EmailController emailController;
 
-    public UserController(IService<User> service, UserService userService, EmailUtils mailUtil) {
-        super(service);
+    public UserController(UserService userService, HttpSession session, HttpServletResponse response, EmailUtils mailUtil, EmailController emailController) {
+        super(userService);
         this.userService = userService;
+        this.session = session;
+        this.response = response;
         this.mailUtil = mailUtil;
+        this.emailController = emailController;
+    }
+
+    @ApiOperation("状态检测")
+    @GetMapping("/check/status")
+    public User checkStatus() throws ServiceException {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            throw new ServiceException("未登录！");
+        } else {
+            return user;
+        }
     }
 
     @ApiOperation("邮箱检验")
@@ -73,17 +83,6 @@ public class UserController extends ServiceController<User> {
     @GetMapping("/login/by/account")
     public User loginByAccount(@RequestParam("account") String account, @RequestParam("password") String password) throws ServiceException {
         User user = service.lambdaQuery().eq(User::getAccount, account).one();
-        return login(user, password);
-    }
-
-    @ApiOperation("账号登录")
-    @GetMapping("/login/by/email")
-    public User loginByEmail(@RequestParam("email") String email, @RequestParam("code") String code) throws ServiceException {
-        User user = service.lambdaQuery().eq(User::getEmail, email).eq(User::getPassword, code).one();
-        return login(user, code);
-    }
-
-    public User login(User user, String password) throws ServiceException {
         if (user == null || !user.getPassword().equals(password)) {
             throw new ServiceException("账号或密码错误！");
         }
@@ -91,70 +90,84 @@ public class UserController extends ServiceController<User> {
         return user;
     }
 
+    @ApiOperation("邮箱登录")
+    @GetMapping("/login/by/email")
+    public User loginByEmail(@RequestParam("email") String email, @RequestParam("code") String code) throws ServiceException {
+        User user = service.lambdaQuery().eq(User::getEmail, email).one();
+        if (user == null) {
+            throw new ServiceException("此邮箱未注册过！");
+        }
+
+        if (emailController.check(code)) {
+            session.setAttribute("user", user);
+            return user;
+        } else {
+            return null;
+        }
+    }
+
+    @ApiOperation("退出登录")
+    @GetMapping("/logout")
+    public boolean logout(){
+        session.setAttribute("user",null);
+        return true;
+    }
+
 
     @Override
     @Roles(Role.USER)
-    public boolean update(BaseDto<User> dto) throws ServiceException {
-        checkUserRoles(dto.getId());
-        super.update(dto);
+    public boolean update(User user) throws ServiceException {
+
+        super.update(user);
         return true;
     }
 
     @Override
     @Roles(Role.USER)
     public boolean removeById(Long id) throws ServiceException {
-        checkUserRoles(id);
+
         super.removeById(id);
         return false;
     }
 
-    @GetMapping("/register/check")
-    @ApiOperation("注册验证")
-    public String registerCheck(@RequestParam("token") String md5, @RequestParam("info") String base64) throws Exception {
-        String formatBase64 = base64.replaceAll(" ", "+");
-        // 在传输的过程中 + 号会被转换成空格
-        String decode = SecurityUtils.BASE64.decode(formatBase64);
-        // 对解析的 AES 字符串编码进行转换，转成 byte 数组
-        String[] split = decode.replace("[", "").replace("]", "").split(",");
-        byte[] bytes = new byte[split.length];
-        for (int i = 0; i < split.length; i++) {
-            bytes[i] = Byte.parseByte(split[i].trim());
+
+    @PostMapping("/register")
+    @ApiOperation("注册")
+    public String emailRegister(@RequestBody UserRegisterDto userRegisterDto) throws Exception {
+        if (!userRegisterDto.getConfirmPassword().equals(userRegisterDto.getPassword())) {
+            throw new ServiceException("2次密码不一致");
         }
-        // 对 AES 进行解码
-        User user = JSONObject.parseObject(SecurityUtils.AES.decrypt(bytes), User.class);
-        User one = userService.lambdaQuery().eq(User::getAccount, user.getAccount()).one();
-        if (one != null) {
-            throw new ServiceException("账号已经存在");
-        }
+        // 检验验证码
+        emailController.check(userRegisterDto.getCode());
+
+        User user = new User();
+        user.setAccount(userRegisterDto.getAccount());
+        user.setEmail(userRegisterDto.getEmail());
+        user.setAccount(userRegisterDto.getPassword());
+        user.setNickName("无昵称");
+        user.setRole(Role.USER.value);
         service.save(user);
+        session.setAttribute("user",user);
         return "注册成功";
     }
 
-    @PostMapping("/register")
-    @ApiOperation("发送注册验证邮箱")
-    public String emailRegister(@RequestBody User user, @RequestParam("confirmPassword") String confirmPassword, HttpServletRequest request) throws Exception {
-        if (confirmPassword.equals(user.getPassword())) {
+    @PostMapping("/reset/password")
+    @ApiOperation("重置密码")
+    public String resetPassword(@RequestBody UserResetPasswordDto resetPasswordDto) throws ServiceException {
+        User user = userService.lambdaQuery().eq(User::getEmail, resetPasswordDto.getEmail()).one();
 
-            String userInfo = JSONObject.toJSONString(user);
-
-            // 对信息进行 AES 加密
-            byte[] encrypt = SecurityUtils.AES.encrypt(userInfo.getBytes());
-            String base64 = SecurityUtils.BASE64.encode(Arrays.toString(encrypt));
-            long l = System.currentTimeMillis();
-            //创建 qs map
-            Map<String, Object> map = new LinkedHashMap<>();
-            map.put("info", base64);
-            // MD5 加密
-            String md5 = SecurityUtils.MD5.encryption(JSON.toJSONString(map), l);
-            map.put("time", l);
-            map.put("token", md5);
-            // 发送MD5加密验证和 用户加密信息
-            String path = StringUtils.getRequestBaseUrl(request) + "/user/register/check?" + StringUtils.createQueryString(map);
-            mailUtil.sendRegisterEmail(user, path);
-        } else {
-            throw new ServiceException("2次密码不一致");
+        if (!resetPasswordDto.getPassword().equals(resetPasswordDto.getConfirmPassword())) {
+            return "2次密码不一致";
         }
-        return "发送注册邮箱成功，请尽快前往您的邮箱验证";
+        if (user == null) {
+            return "此邮箱未注册过";
+        }
+        // 检验验证码
+        emailController.check(resetPasswordDto.getCode());
+
+        user.setPassword(resetPasswordDto.getPassword());
+        userService.updateById(user);
+        return "重置成功";
     }
 
 }

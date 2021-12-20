@@ -15,8 +15,8 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value="BlogOperation对象", description="用户操作文章信息表")
-public class BlogOperation extends BaseEntity<BlogOperation> {
+@ApiModel(value="博客操作", description="用户操作文章信息表")
+public class BlogOperation extends BaseEntity {
 
     @ApiModelProperty(value = "文章id",example = "1")
     private Long blogId;

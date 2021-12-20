@@ -15,7 +15,7 @@ import lombok.Data;
 
 @Data
 @ApiModel(value = "基础DTO对象",description = "基础DTO对象")
-public class BaseDto<T extends BaseEntity<T>> {
+public class BaseDto<T extends BaseEntity> {
 
     @ApiModelProperty(value = "唯一id字段",example = "0")
     private Long id;

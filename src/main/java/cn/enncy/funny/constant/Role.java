@@ -6,9 +6,10 @@ package cn.enncy.funny.constant;
  */
 public enum Role {
     // 权限
+    VISITOR("visitor","游客",0),
     USER("user","用戶",1),
-    ROOT("root","管理员",2),
-    VISITOR("visitor","游客",3);
+    ROOT("admin","管理员",2);
+
 
     public String value;
     public String description;

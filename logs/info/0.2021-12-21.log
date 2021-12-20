@@ -1,0 +1,55 @@
+00:22:19.687 [Thread-142] INFO  c.alibaba.druid.pool.DruidDataSource - {dataSource-4} closing ...
+00:22:19.773 [Thread-142] INFO  c.alibaba.druid.pool.DruidDataSource - {dataSource-4} closed
+00:22:20.355 [restartedMain] INFO  cn.enncy.funny.FunnyApplication - Starting FunnyApplication using Java 1.8.0_281 on LAPTOP-39475F8U with PID 52344 (E:\IDEA\Project\funny\target\classes started by ASUS in E:\IDEA\Project\funny)
+00:22:20.356 [restartedMain] INFO  cn.enncy.funny.FunnyApplication - The following profiles are active: dev
+00:22:22.447 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8999 (http)
+00:22:22.448 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8999"]
+00:22:22.448 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+00:22:22.448 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.50]
+00:22:22.469 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+00:22:22.469 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2111 ms
+00:22:23.269 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@27e9174e, org.springframework.security.web.context.SecurityContextPersistenceFilter@7887cc08, org.springframework.security.web.header.HeaderWriterFilter@5a1e1eca, org.springframework.security.web.authentication.logout.LogoutFilter@43c405fc, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@62490a91, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@667f4358, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@4140a478, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@31c0ca8, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@29deaa4f, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@12e07e69, org.springframework.security.web.session.SessionManagementFilter@10fbf2ae, org.springframework.security.web.access.ExceptionTranslationFilter@3d58c70f, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@cfbe118]
+00:22:23.325 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+00:22:23.420 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8999"]
+00:22:23.424 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8999 (http) with context path ''
+00:22:23.509 [restartedMain] INFO  cn.enncy.funny.FunnyApplication - Started FunnyApplication in 3.219 seconds (JVM running for 13409.676)
+00:22:23.510 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+00:24:38.448 [Thread-146] INFO  c.alibaba.druid.pool.DruidDataSource - {dataSource-0} closing ...
+00:24:38.772 [restartedMain] INFO  cn.enncy.funny.FunnyApplication - Starting FunnyApplication using Java 1.8.0_281 on LAPTOP-39475F8U with PID 52344 (E:\IDEA\Project\funny\target\classes started by ASUS in E:\IDEA\Project\funny)
+00:24:38.772 [restartedMain] INFO  cn.enncy.funny.FunnyApplication - The following profiles are active: dev
+00:24:39.200 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8999 (http)
+00:24:39.201 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8999"]
+00:24:39.201 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+00:24:39.201 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.50]
+00:24:39.224 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+00:24:39.225 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 451 ms
+00:24:40.211 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3cf7bb41, org.springframework.security.web.context.SecurityContextPersistenceFilter@60bddf9a, org.springframework.security.web.header.HeaderWriterFilter@763ff9c2, org.springframework.security.web.authentication.logout.LogoutFilter@4fc136c3, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@4854c376, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@78ac53b2, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@4ad60f3, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@397419c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@aef49c5, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@236d93ca, org.springframework.security.web.session.SessionManagementFilter@5fe5aa80, org.springframework.security.web.access.ExceptionTranslationFilter@7b930b4a, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@35c244a8]
+00:24:40.292 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+00:24:40.440 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8999"]
+00:24:40.444 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8999 (http) with context path ''
+00:24:40.565 [restartedMain] INFO  cn.enncy.funny.FunnyApplication - Started FunnyApplication in 1.814 seconds (JVM running for 13546.733)
+00:24:40.566 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+00:26:59.291 [http-nio-8999-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+00:26:59.292 [http-nio-8999-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+00:26:59.293 [http-nio-8999-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+00:28:32.682 [http-nio-8999-exec-9] INFO  c.alibaba.druid.pool.DruidDataSource - {dataSource-5} inited
+00:42:44.381 [Thread-150] INFO  c.alibaba.druid.pool.DruidDataSource - {dataSource-5} closing ...
+00:42:44.382 [Thread-150] INFO  c.alibaba.druid.pool.DruidDataSource - {dataSource-5} closed
+00:42:44.851 [restartedMain] INFO  cn.enncy.funny.FunnyApplication - Starting FunnyApplication using Java 1.8.0_281 on LAPTOP-39475F8U with PID 52344 (E:\IDEA\Project\funny\target\classes started by ASUS in E:\IDEA\Project\funny)
+00:42:44.851 [restartedMain] INFO  cn.enncy.funny.FunnyApplication - The following profiles are active: dev
+00:42:45.676 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8999 (http)
+00:42:45.676 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8999"]
+00:42:45.676 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+00:42:45.676 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.50]
+00:42:45.699 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+00:42:45.699 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 845 ms
+00:42:46.682 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@311fd98a, org.springframework.security.web.context.SecurityContextPersistenceFilter@78fa12d, org.springframework.security.web.header.HeaderWriterFilter@1351961c, org.springframework.security.web.authentication.logout.LogoutFilter@9661d74, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@5d8b8cce, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@10978e2b, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@45b8d947, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@40446559, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5f3aea3b, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3927c92b, org.springframework.security.web.session.SessionManagementFilter@5095d7a, org.springframework.security.web.access.ExceptionTranslationFilter@120ab0dd, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@b3eebb0]
+00:42:46.749 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+00:42:46.857 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8999"]
+00:42:46.862 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8999 (http) with context path ''
+00:42:47.002 [restartedMain] INFO  cn.enncy.funny.FunnyApplication - Started FunnyApplication in 2.202 seconds (JVM running for 14633.168)
+00:42:47.003 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+00:42:50.755 [http-nio-8999-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+00:42:50.755 [http-nio-8999-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+00:42:50.756 [http-nio-8999-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+00:42:57.033 [http-nio-8999-exec-4] INFO  c.alibaba.druid.pool.DruidDataSource - {dataSource-6} inited

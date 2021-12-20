@@ -5,9 +5,9 @@ spring:
     restart:
       enabled: true  # 热部署
   datasource:
-    url: jdbc:mysql://localhost:3306/funny_db?useSSL=false&charactorEncoding=utf8&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: root
-    password: enncymysql
+    url: jdbc:mysql://localhost:3306/blog_db?useSSL=false&charactorEncoding=utf8&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: blog_db
+    password: KL6pdcMn3CwfWxaC
     driver-class-name: com.mysql.cj.jdbc.Driver
   mail:
     host: smtp.163.com
@@ -19,6 +19,11 @@ spring:
       name: enncy
       password: ll877526278
       roles: admin
+  mvc:
+    static-path-pattern: /**
+  web:
+    resources:
+      static-locations: /static/,/.well-known/
 
 server:
   port: 8999  # 服务器启动端口
@@ -31,6 +36,5 @@ springfox:
       base-url:
 
 logging:
-  config: classpath:logback.xml
   file:
     path: logs/

@@ -19,6 +19,12 @@ spring:
       name: enncy
       password: ll877526278
       roles: admin
+  mvc:
+    static-path-pattern: /**
+  web:
+    resources:
+      static-locations: /static/,/.well-known/
+
 
 server:
   port: 8999  # 服务器启动端口
@@ -30,6 +36,4 @@ springfox:
       enabled: true
       base-url:
 
-logging:
-  config: classpath:logback.xml
 

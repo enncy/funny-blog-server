@@ -28,6 +28,11 @@ import java.util.regex.Pattern;
 public class SqlExceptionHandler {
 
     /**
+     * 扫描实体类
+     */
+    private static final List<Class<?>> ENTITYS_CLASS = ClassScanner.scan("cn.enncy.funny.entity");
+
+    /**
      * 分发异常处理
      *
      * @return: void
@@ -61,6 +66,21 @@ public class SqlExceptionHandler {
      */
     @HandleSqlException(SQLIntegrityConstraintViolationException.class)
     public String integrityConstraint(SQLException e) {
+        // 主键破坏
+        String primaryKeyRegex = "Duplicate entry '(.*?)' for key '(.*?)\\.PRIMARY'";
+        Matcher primaryKeyMatcher = Pattern.compile(primaryKeyRegex).matcher(e.getMessage());
+        if (primaryKeyMatcher.find()) {
+            // 获取数据库表
+            String table = primaryKeyMatcher.group(2);
+            String description = ENTITYS_CLASS.stream()
+                    .filter(BaseEntity.class::isAssignableFrom)
+                    .filter(c -> c.getName().toLowerCase().contains(table))
+                    .map((c) -> c.getAnnotation(ApiModelProperty.class).value())
+                    .findFirst().orElse("");
+
+            return "此" + description + " 已经存在";
+        }
+        // 索引破坏
         // 匹配数据库报错信息
         String regex = "Duplicate entry '(.*?)' for key '(.*?)\\..*?_(.*?)_uindex'";
         Matcher matcher = Pattern.compile(regex).matcher(e.getMessage());
@@ -72,10 +92,9 @@ public class SqlExceptionHandler {
             String table = matcher.group(2);
             // 获取发生冲突的约束键
             String keys = matcher.group(3);
-            // 扫描实体类
-            List<Class<?>> scan = ClassScanner.scan("cn.enncy.funny.entity");
+
             // 寻找冲突的字段的注解描述
-            String description = scan.stream()
+            String description = ENTITYS_CLASS.stream()
                     .filter(BaseEntity.class::isAssignableFrom)
                     .filter(c -> c.getName().toLowerCase().contains(table))
                     .map(c -> {

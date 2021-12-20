@@ -49,8 +49,8 @@ public class BlogOperationController extends ServiceController<BlogOperation> {
 
     @Override
     @Roles(Role.VISITOR)
-    public List<BlogOperation> selectPage(@RequestParam("curren") int current,@RequestParam("size")  int size) {
-        return super.selectPage(current, size);
+    public List<BlogOperation> list(@RequestParam("curren") int current,@RequestParam("size")  int size) {
+        return super.list(current, size);
     }
 
     @Override
@@ -61,8 +61,8 @@ public class BlogOperationController extends ServiceController<BlogOperation> {
 
     @Override
     @Roles(Role.USER)
-    public boolean update(@RequestBody BaseDto<BlogOperation> dto) throws ServiceException {
-        return super.update(dto);
+    public boolean update(@RequestBody BlogOperation target) throws ServiceException {
+        return super.update(target);
     }
 
     @Override

@@ -15,6 +15,10 @@ import java.net.InetAddress;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -67,7 +71,7 @@ class MyTest {
     }
     @Test
     public void t(){
-        System.out.println(JSON.toJSONString(JSON.parseObject("{\"confirmPassword\":\"132525\",\"password\":\"132525\",\"nickName\":\"\",\"account\":\"enncy\",\"email\":\"877526278@qq.com\"}"), SerializerFeature.MapSortField));
+
     }
 
     @Test

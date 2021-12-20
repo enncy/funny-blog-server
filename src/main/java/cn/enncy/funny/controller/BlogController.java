@@ -46,22 +46,21 @@ public class BlogController extends ServiceController<Blog> {
 
     @Override
     @Roles(Role.VISITOR)
-    public List<Blog> selectPage(@RequestParam("current") int current, @RequestParam("size") int size) {
-        return super.selectPage(current, size);
+    public List<Blog> list(@RequestParam("current") int current, @RequestParam("size") int size) {
+        return super.list(current, size);
     }
 
     @Override
     @Roles(Role.USER)
     public boolean save(@RequestBody Blog target) throws ServiceException {
-        checkUserRoles(target.getUserId());
+
         return super.save(target);
     }
 
     @Override
     @Roles(Role.USER)
-    public boolean update(@RequestBody BaseDto<Blog> dto) throws ServiceException {
-        checkUserRoles(dto.getId());
-        return super.update(dto);
+    public boolean update(@RequestBody Blog blog) throws ServiceException {
+        return super.update(blog);
     }
 
     @Override
@@ -74,7 +73,7 @@ public class BlogController extends ServiceController<Blog> {
     @GetMapping("/remove/by")
     @Roles(Role.USER)
     public boolean removeByUserId(@RequestParam("userId") Long userId) throws ServiceException {
-        checkUserRoles(userId);
+
         return service.lambdaUpdate().eq(Blog::getUserId, userId).remove();
     }
 

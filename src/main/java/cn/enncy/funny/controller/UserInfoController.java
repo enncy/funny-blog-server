@@ -49,8 +49,8 @@ public class UserInfoController extends ServiceController<UserInfo> {
 
     @Override
     @Roles(Role.VISITOR)
-    public List<UserInfo> selectPage(@RequestParam("current") int current, @RequestParam("size") int size) {
-        return super.selectPage(current, size);
+    public List<UserInfo> list(@RequestParam("current") int current, @RequestParam("size") int size) {
+        return super.list(current, size);
     }
 
     @Override
@@ -61,8 +61,8 @@ public class UserInfoController extends ServiceController<UserInfo> {
 
     @Override
     @Roles(Role.USER)
-    public boolean update(@RequestBody BaseDto<UserInfo> dto) throws ServiceException {
-        return super.update(dto);
+    public boolean update(@RequestBody UserInfo target) throws ServiceException {
+        return super.update(target);
     }
 
     @Override

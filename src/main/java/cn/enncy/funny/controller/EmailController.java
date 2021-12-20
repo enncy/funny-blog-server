@@ -2,8 +2,10 @@ package cn.enncy.funny.controller;
 
 
 import cn.enncy.funny.annotation.ResponseHandler;
+import cn.enncy.funny.entity.User;
 import cn.enncy.funny.exceptions.ServiceException;
 import cn.enncy.funny.bean.EmailValidator;
+import cn.enncy.funny.service.UserService;
 import cn.enncy.funny.utils.EmailUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -48,9 +50,12 @@ public class EmailController {
 
     private final EmailUtils mailUtil;
 
-    public EmailController(HttpSession session, EmailUtils mailUtil) {
+    private UserService userService;
+
+    public EmailController(HttpSession session, EmailUtils mailUtil, UserService userService) {
         this.session = session;
         this.mailUtil = mailUtil;
+        this.userService = userService;
     }
 
     @GetMapping("/check")
@@ -58,9 +63,7 @@ public class EmailController {
     public boolean check(@RequestParam("code") String code) throws ServiceException {
 
         EmailValidator validator = (EmailValidator) session.getAttribute(VALIDATOR_NAME);
-
         Object verifiedCode = session.getAttribute(VERIFIED_CODE);
-        System.out.println(verifiedCode);
         // 如果验证过的码存，并且和当前的码一样，则报错
         if (verifiedCode != null && String.valueOf(verifiedCode).equals(code)) {
             throw new ServiceException("此验证码已经被使用过了！");
@@ -87,6 +90,12 @@ public class EmailController {
     @GetMapping("/send/verify")
     @ApiOperation("发送验证码")
     public String sendVerifyCode(@RequestParam("email") String email) throws ServiceException {
+
+        User user = userService.lambdaQuery().eq(User::getEmail, email).one();
+        if(user==null){
+            return "此邮箱未注册过";
+        }
+
         // 是否存在验证码
         if (session.getAttribute(VALIDATOR_NAME) != null) {
             EmailValidator validator = (EmailValidator) session.getAttribute(VALIDATOR_NAME);

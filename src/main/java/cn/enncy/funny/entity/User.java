@@ -19,8 +19,8 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "User对象", description = "用户表")
-public class User extends BaseEntity<User> {
+@ApiModel(value = "用户", description = "用户表")
+public class User extends BaseEntity  {
 
     @ApiModelProperty("密码")
     private String password;
@@ -43,40 +43,6 @@ public class User extends BaseEntity<User> {
     @ApiModelProperty(value = "逻辑删除", hidden = true )
     @TableLogic
     private Integer deleted;
-
-    public void setPassword(String password) throws ServiceException {
-        if(StringUtils.isEmpty(password)){
-            throw new ServiceException("密码不能为空");
-        }
-        if(StringUtils.outOfRange(password,6,20)){
-            throw new ServiceException("密码至少 6-20 个字符");
-        }
-        if(StringUtils.hasSpecialCharacters(password)){
-            throw new ServiceException("密码不能存在特殊字符");
-        }
-        this.password = password;
-    }
-
-    public void setNickName(String nickName) throws ServiceException {
-        if(StringUtils.notEmpty(nickName) && StringUtils.outOfRange(nickName,0,20)){
-            throw new ServiceException("昵称不能大于20个字符(中文占2个)");
-        }
-        this.nickName = nickName;
-    }
-
-    public void setAccount(String account) throws ServiceException {
-
-        if(StringUtils.isEmpty(account)){
-            throw new ServiceException("密码不能为空");
-        }
-        if(StringUtils.outOfRange(account,4,20)){
-            throw new ServiceException("账号至少 4-20 个字符");
-        }
-        if(StringUtils.hasSpecialCharacters(account)){
-            throw new ServiceException("账号不能存在特殊字符");
-        }
-        this.account = account;
-    }
 
     public void setRole(String role) {
         this.role = Role.parseToRole(role).value;

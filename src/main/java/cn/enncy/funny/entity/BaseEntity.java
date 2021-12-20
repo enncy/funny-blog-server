@@ -19,8 +19,8 @@ import lombok.Data;
  */
 
 @Data
-@ApiModel(value = "基础实体对象", description = "基础实体对象")
-public class BaseEntity<T> {
+@ApiModel(value = "基础实体", description = "基础实体对象")
+public class BaseEntity  {
 
     @ApiModelProperty(value = "自增主键", hidden = true)
     @JsonFormat(shape = JsonFormat.Shape.STRING)
@@ -36,6 +36,7 @@ public class BaseEntity<T> {
     @TableField(fill = FieldFill.INSERT)
     private Long createTime;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @ApiModelProperty(value = "更新时间", hidden = true)
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateTime;
