@@ -7,6 +7,7 @@ import cn.enncy.funny.constant.Role;
 import cn.enncy.funny.dto.BaseDto;
 import cn.enncy.funny.entity.BlogOperation;
 import cn.enncy.funny.exceptions.ServiceException;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,46 +36,5 @@ public class BlogOperationController extends ServiceController<BlogOperation> {
         super(service);
     }
 
-    @Override
-    @Roles(Role.VISITOR)
-    public BlogOperation selectById(@RequestParam("id") Long id) throws ServiceException {
-        return super.selectById(id);
-    }
-
-    @Override
-    @Roles(Role.VISITOR)
-    public List<BlogOperation> selectAll() {
-        return super.selectAll();
-    }
-
-    @Override
-    @Roles(Role.VISITOR)
-    public List<BlogOperation> list(@RequestParam("curren") int current,@RequestParam("size")  int size) {
-        return super.list(current, size);
-    }
-
-    @Override
-    @Roles(Role.USER)
-    public boolean save(@RequestBody BlogOperation target) throws ServiceException {
-        return super.save(target);
-    }
-
-    @Override
-    @Roles(Role.USER)
-    public boolean update(@RequestBody BlogOperation target) throws ServiceException {
-        return super.update(target);
-    }
-
-    @Override
-    @Roles(Role.USER)
-    public boolean removeById(@RequestParam("id") Long id) throws ServiceException {
-        return super.removeById(id);
-    }
-
-    @Override
-    @Roles(Role.VISITOR)
-    public int count() {
-        return super.count();
-    }
 }
 

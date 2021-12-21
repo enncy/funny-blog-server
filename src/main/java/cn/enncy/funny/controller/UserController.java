@@ -114,22 +114,6 @@ public class UserController extends ServiceController<User> {
     }
 
 
-    @Override
-    @Roles(Role.USER)
-    public boolean update(User user) throws ServiceException {
-
-        super.update(user);
-        return true;
-    }
-
-    @Override
-    @Roles(Role.USER)
-    public boolean removeById(Long id) throws ServiceException {
-
-        super.removeById(id);
-        return false;
-    }
-
 
     @PostMapping("/register")
     @ApiOperation("注册")

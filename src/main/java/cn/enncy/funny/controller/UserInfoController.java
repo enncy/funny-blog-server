@@ -7,6 +7,7 @@ import cn.enncy.funny.constant.Role;
 import cn.enncy.funny.dto.BaseDto;
 import cn.enncy.funny.entity.UserInfo;
 import cn.enncy.funny.exceptions.ServiceException;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -34,49 +35,6 @@ public class UserInfoController extends ServiceController<UserInfo> {
     public UserInfoController(IService<UserInfo> service) {
         super(service);
     }
-
-    @Override
-    @Roles(Role.VISITOR)
-    public UserInfo selectById(@RequestParam("id") Long id) throws ServiceException {
-        return super.selectById(id);
-    }
-
-    @Override
-    @Roles(Role.VISITOR)
-    public List<UserInfo> selectAll() {
-        return super.selectAll();
-    }
-
-    @Override
-    @Roles(Role.VISITOR)
-    public List<UserInfo> list(@RequestParam("current") int current, @RequestParam("size") int size) {
-        return super.list(current, size);
-    }
-
-    @Override
-    @Roles(Role.USER)
-    public boolean save(@RequestBody UserInfo target) throws ServiceException {
-        return super.save(target);
-    }
-
-    @Override
-    @Roles(Role.USER)
-    public boolean update(@RequestBody UserInfo target) throws ServiceException {
-        return super.update(target);
-    }
-
-    @Override
-    @Roles(Role.USER)
-    public boolean removeById(@RequestParam("id") Long id) throws ServiceException {
-        return super.removeById(id);
-    }
-
-    @Override
-    @Roles(Role.VISITOR)
-    public int count() {
-        return super.count();
-    }
-
 
 }
 

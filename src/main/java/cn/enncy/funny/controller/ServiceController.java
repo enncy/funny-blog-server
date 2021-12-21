@@ -8,6 +8,9 @@ import cn.enncy.funny.dto.BaseDto;
 import cn.enncy.funny.entity.User;
 import cn.enncy.funny.exceptions.ServiceException;
 import cn.enncy.funny.entity.BaseEntity;
+import cn.enncy.funny.utils.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.swagger.annotations.ApiOperation;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 /**
  * //TODO
@@ -42,43 +46,51 @@ public class ServiceController<T extends BaseEntity> {
 
     @ApiOperation("根据id查询实体")
     @GetMapping("/get/one")
-    @Roles(value = {Role.ROOT})
     public T selectById(@RequestParam("id") Long id) throws ServiceException {
         checkExist(id);
         return service.getById(id);
     }
 
-    @ApiOperation("获取全部信息")
-    @GetMapping("/get/all")
-    @Roles(value = {Role.ROOT})
-    public List<T> selectAll(){
-        return service.list();
+    @ApiOperation("根据条件搜索")
+    @GetMapping("/search")
+    public List<T>  search(@RequestParam(required = false) Map<String,Object> map){
+        QueryWrapper<T> queryWrapper = new QueryWrapper<>();
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            queryWrapper.like(StringUtils.humpToUnderline(entry.getKey()), entry.getValue()).or();
+        }
+        return service.getBaseMapper().selectList(queryWrapper);
     }
 
     @ApiOperation("根据数量查询")
     @GetMapping("/list")
-    @Roles(value = {Role.ROOT})
-    public List<T> list(@RequestParam("page") int page, @RequestParam("size") int size){
-        return service.page(new Page<>(page,size)).getRecords();
+    public IPage<T> list(@RequestParam(required = false) Map<String,Object> map){
+
+        int page = Integer.parseInt(map.remove("page").toString());
+        int size = Integer.parseInt(map.remove("size").toString());
+
+        QueryWrapper<T> queryWrapper = new QueryWrapper<>();
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            queryWrapper.like(entry.getKey(), entry.getValue()).or();
+
+        }
+
+        return service.getBaseMapper().selectPage(new Page<>(page, size), queryWrapper);
     }
 
     @ApiOperation("保存信息")
     @PostMapping("/insert")
-    @Roles(value = {Role.ROOT})
     public boolean save(@RequestBody T target) throws ServiceException {
         return service.save(target);
     }
 
     @ApiOperation("根据id更新")
     @PostMapping("/update")
-    @Roles(value = {Role.ROOT})
     public boolean update(@RequestBody T target) throws ServiceException {
         return service.updateById(target);
     }
 
     @ApiOperation("根据id删除")
     @GetMapping("/delete")
-    @Roles(value = {Role.ROOT})
     public boolean removeById(@RequestParam("id") Long id) throws ServiceException {
         checkExist(id);
         return service.removeById(id);
@@ -86,7 +98,6 @@ public class ServiceController<T extends BaseEntity> {
 
     @ApiOperation("查询数量")
     @GetMapping("/count")
-    @Roles(value = {Role.ROOT})
     public int count(){
         return service.count();
     }

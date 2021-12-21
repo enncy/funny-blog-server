@@ -7,6 +7,7 @@ import cn.enncy.funny.constant.Role;
 import cn.enncy.funny.dto.BaseDto;
 import cn.enncy.funny.entity.Blog;
 import cn.enncy.funny.exceptions.ServiceException;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,55 +33,5 @@ public class BlogController extends ServiceController<Blog> {
         super(service);
     }
 
-    @Override
-    @Roles(Role.VISITOR)
-    public Blog selectById(@RequestParam("id") Long id) throws ServiceException {
-        return super.selectById(id);
-    }
-
-    @Override
-    @Roles(Role.VISITOR)
-    public List<Blog> selectAll() {
-        return super.selectAll();
-    }
-
-    @Override
-    @Roles(Role.VISITOR)
-    public List<Blog> list(@RequestParam("current") int current, @RequestParam("size") int size) {
-        return super.list(current, size);
-    }
-
-    @Override
-    @Roles(Role.USER)
-    public boolean save(@RequestBody Blog target) throws ServiceException {
-
-        return super.save(target);
-    }
-
-    @Override
-    @Roles(Role.USER)
-    public boolean update(@RequestBody Blog blog) throws ServiceException {
-        return super.update(blog);
-    }
-
-    @Override
-    @Roles(Role.ROOT)
-    public boolean removeById(@RequestParam("id") Long id) throws ServiceException {
-        return super.removeById(id);
-    }
-
-    @ApiOperation("删除")
-    @GetMapping("/remove/by")
-    @Roles(Role.USER)
-    public boolean removeByUserId(@RequestParam("userId") Long userId) throws ServiceException {
-
-        return service.lambdaUpdate().eq(Blog::getUserId, userId).remove();
-    }
-
-    @Override
-    @Roles(Role.VISITOR)
-    public int count() {
-        return super.count();
-    }
 }
 
